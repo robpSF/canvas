@@ -32,7 +32,8 @@ data_file = st.file_uploader("Upload CSV File", type=["csv"])
 if data_file is not None:
     # Read the CSV file
     try:
-        df = pd.read_csv(data_file, on_bad_lines='skip')
+        # Attempt to read the CSV file with more robust handling
+        df = pd.read_csv(data_file, error_bad_lines=False, warn_bad_lines=False, encoding='utf-8', skip_blank_lines=True)
         st.write("### Uploaded Data:")
         st.write(df)
 
@@ -54,5 +55,7 @@ if data_file is not None:
                                    mime="application/vnd.openxmlformats-officedocument.presentationml.presentation")
         else:
             st.error("CSV must contain 'Field' and 'Details' columns.")
+    except pd.errors.ParserError:
+        st.error("Error reading file: The CSV file appears to be badly formatted. Please check for missing quotes or incorrect delimiters.")
     except Exception as e:
         st.error(f"Error reading file: {e}")
