@@ -35,7 +35,7 @@ def create_ppt_slide(data):
         title_frame.paragraphs[0].font.bold = True
 
         # Clean details text and format bold parts
-        details = row['Details'].replace("._x000D_\n_x000D_", " ")
+        details = row['Details'].replace("_x000D_", "")
         details = re.sub(r"\*\*(.*?)\*\*", lambda match: match.group(1).upper(), details)
 
         # Add details in a text box below the heading
@@ -65,10 +65,10 @@ if data_file is not None:
         st.write(df)
 
         # Check if the required columns are present
-        if 'Field' in df.columns and 'Details' in df.columns:
+        if 'Field' in df.columns and 'Summary' in df.columns:
             # Button to generate PowerPoint
             if st.button("Create PowerPoint Slide"):
-                ppt = create_ppt_slide(df[['Field', 'Details']])
+                ppt = create_ppt_slide(df[['Field', 'Summary']])
                 
                 # Save to BytesIO object
                 ppt_io = BytesIO()
