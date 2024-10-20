@@ -19,35 +19,45 @@ def create_ppt_slide(data):
     content_slide_layout = prs.slide_layouts[5]  # Blank slide layout
     content_slide = prs.slides.add_slide(content_slide_layout)
 
-    left = Inches(0.5)
-    top = Inches(1.0)
-    width = Inches(4.5)
-    height = Inches(0.8)
+    # Define the positions for each field
+    positions = {
+        "scenario": (Inches(0.5), Inches(0.5)),
+        "inciting-incident": (Inches(0.5), Inches(1.5)),
+        "training-objectives": (Inches(0.5), Inches(2.5)),
+        "channels": (Inches(0.5), Inches(4.0)),
+        "stakeholders": (Inches(0.5), Inches(5.5)),
+        "roles": (Inches(5.0), Inches(0.5)),
+        "actions": (Inches(5.0), Inches(2.5)),
+        "research": (Inches(5.0), Inches(4.0)),
+        "info": (Inches(5.0), Inches(5.5)),
+        "guidance": (Inches(5.0), Inches(7.0))
+    }
 
-    spacing = Inches(0.5)  # Space between each box
+    width = Inches(4.5)
+    height = Inches(1.0)
 
     for index, row in data.iterrows():
-        # Add field name as bold heading
-        title_box = content_slide.shapes.add_textbox(left, top, width, Inches(0.3))
-        title_frame = title_box.text_frame
-        title_frame.text = row['Field']
-        title_frame.paragraphs[0].font.size = Pt(12)
-        title_frame.paragraphs[0].font.bold = True
+        if row['Field'] in positions:
+            left, top = positions[row['Field']]
 
-        # Clean details text and format bold parts
-        details = row['Summary'].replace("_x000D_", "")
-        details = re.sub(r"\*\*(.*?)\*\*", lambda match: match.group(1).upper(), details)
+            # Add field name as bold heading
+            title_box = content_slide.shapes.add_textbox(left, top, width, Inches(0.3))
+            title_frame = title_box.text_frame
+            title_frame.text = row['Field']
+            title_frame.paragraphs[0].font.size = Pt(12)
+            title_frame.paragraphs[0].font.bold = True
 
-        # Add details in a text box below the heading
-        text_box = content_slide.shapes.add_textbox(left, top + Inches(0.4), width, height)
-        text_frame = text_box.text_frame
-        text_frame.word_wrap = True
-        p = text_frame.add_paragraph()
-        p.text = details
-        p.font.size = Pt(9)
+            # Clean details text and format bold parts
+            details = row['Summary'].replace("_x000D_", "")
+            details = re.sub(r"\*\*(.*?)\*\*", lambda match: match.group(1).upper(), details)
 
-        # Adjust top for next entry, adding spacing
-        top += height + spacing
+            # Add details in a text box below the heading
+            text_box = content_slide.shapes.add_textbox(left, top + Inches(0.4), width, height)
+            text_frame = text_box.text_frame
+            text_frame.word_wrap = True
+            p = text_frame.add_paragraph()
+            p.text = details
+            p.font.size = Pt(9)
     
     return prs
 
