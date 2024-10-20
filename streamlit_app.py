@@ -7,14 +7,21 @@ from io import BytesIO
 # Function to create a PowerPoint slide from the provided data
 def create_ppt_slide(data):
     prs = Presentation()
-    slide_layout = prs.slide_layouts[1]  # Title and Content layout
+    slide_layout = prs.slide_layouts[0]  # Title slide layout
     slide = prs.slides.add_slide(slide_layout)
     
+    # Set the title of the slide
     title = slide.shapes.title
     title.text = "Crisis Scenario Overview"
 
-    textbox = slide.shapes.add_textbox(Inches(1), Inches(1.5), Inches(8), Inches(5))
-    text_frame = textbox.text_frame
+    # Add a new slide for content
+    content_slide_layout = prs.slide_layouts[1]  # Title and Content layout
+    content_slide = prs.slides.add_slide(content_slide_layout)
+    content_title = content_slide.shapes.title
+    content_title.text = "Details Overview"
+
+    text_box = content_slide.shapes.add_textbox(Inches(1), Inches(1.5), Inches(8.5), Inches(5))
+    text_frame = text_box.text_frame
     text_frame.word_wrap = True
 
     for index, row in data.iterrows():
