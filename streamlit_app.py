@@ -35,7 +35,7 @@ def create_ppt_slide(data):
         title_frame.paragraphs[0].font.bold = True
 
         # Clean details text and format bold parts
-        details = row['Details'].replace("_x000D_", "")
+        details = row['Summary'].replace("_x000D_", "")
         details = re.sub(r"\*\*(.*?)\*\*", lambda match: match.group(1).upper(), details)
 
         # Add details in a text box below the heading
@@ -81,7 +81,7 @@ if data_file is not None:
                                    file_name="scenario_overview.pptx", 
                                    mime="application/vnd.openxmlformats-officedocument.presentationml.presentation")
         else:
-            st.error("CSV must contain 'Field' and 'Details' columns.")
+            st.error("CSV must contain 'Field' and 'Summary' columns.")
     except pd.errors.ParserError:
         st.error("Error reading file: The CSV file appears to be badly formatted. Please check for missing quotes or incorrect delimiters.")
     except Exception as e:
