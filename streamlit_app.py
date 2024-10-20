@@ -15,29 +15,37 @@ def create_ppt_slide(data):
     title = slide.shapes.title
     title.text = "Crisis Scenario Overview"
 
-    # Add a new slide for each field-detail pair
-    for index, row in data.iterrows():
-        content_slide_layout = prs.slide_layouts[5]  # Blank slide layout
-        content_slide = prs.slides.add_slide(content_slide_layout)
+    # Add a new slide for content overview
+    content_slide_layout = prs.slide_layouts[5]  # Blank slide layout
+    content_slide = prs.slides.add_slide(content_slide_layout)
 
-        # Add field name as a title
-        title_box = content_slide.shapes.add_textbox(Inches(1), Inches(0.5), Inches(8.5), Inches(1))
+    left = Inches(0.5)
+    top = Inches(1.0)
+    width = Inches(4.5)
+    height = Inches(5.0)
+
+    for index, row in data.iterrows():
+        # Add field name as bold heading
+        title_box = content_slide.shapes.add_textbox(left, top, width, Inches(0.3))
         title_frame = title_box.text_frame
         title_frame.text = row['Field']
-        title_frame.paragraphs[0].font.size = Pt(14)
+        title_frame.paragraphs[0].font.size = Pt(12)
         title_frame.paragraphs[0].font.bold = True
 
         # Clean details text and format bold parts
         details = row['Details'].replace("._x000D_\n_x000D_", " ")
         details = re.sub(r"\*\*(.*?)\*\*", lambda match: match.group(1).upper(), details)
 
-        # Add details in a text box
-        text_box = content_slide.shapes.add_textbox(Inches(1), Inches(1.5), Inches(8.5), Inches(5))
+        # Add details in a text box below the heading
+        text_box = content_slide.shapes.add_textbox(left, top + Inches(0.4), width, height)
         text_frame = text_box.text_frame
         text_frame.word_wrap = True
         p = text_frame.add_paragraph()
         p.text = details
         p.font.size = Pt(9)
+
+        # Adjust top for next entry
+        top += Inches(1.0)
     
     return prs
 
