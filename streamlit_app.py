@@ -32,7 +32,7 @@ data_file = st.file_uploader("Upload CSV File", type=["csv"])
 if data_file is not None:
     # Read the CSV file
     try:
-        df = pd.read_csv(data_file)
+        df = pd.read_csv(data_file, on_bad_lines='skip')
         st.write("### Uploaded Data:")
         st.write(df)
 
