@@ -33,7 +33,7 @@ if data_file is not None:
     # Read the CSV file
     try:
         # Attempt to read the CSV file with more robust handling
-        df = pd.read_csv(data_file, error_bad_lines=False, warn_bad_lines=False, encoding='utf-8', skip_blank_lines=True)
+        df = pd.read_csv(data_file, encoding='utf-8', skip_blank_lines=True, engine='python')
         st.write("### Uploaded Data:")
         st.write(df)
 
