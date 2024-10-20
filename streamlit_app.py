@@ -14,20 +14,25 @@ def create_ppt_slide(data):
     title = slide.shapes.title
     title.text = "Crisis Scenario Overview"
 
-    # Add a new slide for content
-    content_slide_layout = prs.slide_layouts[1]  # Title and Content layout
-    content_slide = prs.slides.add_slide(content_slide_layout)
-    content_title = content_slide.shapes.title
-    content_title.text = "Details Overview"
-
-    text_box = content_slide.shapes.add_textbox(Inches(1), Inches(1.5), Inches(8.5), Inches(5))
-    text_frame = text_box.text_frame
-    text_frame.word_wrap = True
-
+    # Add a new slide for each field-detail pair
     for index, row in data.iterrows():
+        content_slide_layout = prs.slide_layouts[5]  # Blank slide layout
+        content_slide = prs.slides.add_slide(content_slide_layout)
+
+        # Add field name as a title
+        title_box = content_slide.shapes.add_textbox(Inches(1), Inches(0.5), Inches(8.5), Inches(1))
+        title_frame = title_box.text_frame
+        title_frame.text = row['Field']
+        title_frame.paragraphs[0].font.size = Pt(14)
+        title_frame.paragraphs[0].font.bold = True
+
+        # Add details in a text box
+        text_box = content_slide.shapes.add_textbox(Inches(1), Inches(1.5), Inches(8.5), Inches(5))
+        text_frame = text_box.text_frame
+        text_frame.word_wrap = True
         p = text_frame.add_paragraph()
-        p.text = f"{row['Field']}: {row['Details']}"
-        p.font.size = Pt(14)
+        p.text = row['Details']
+        p.font.size = Pt(9)
     
     return prs
 
