@@ -3,6 +3,7 @@ import streamlit as st
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from io import BytesIO
+import re
 
 # Function to create a PowerPoint slide from the provided data
 def create_ppt_slide(data):
@@ -26,12 +27,16 @@ def create_ppt_slide(data):
         title_frame.paragraphs[0].font.size = Pt(14)
         title_frame.paragraphs[0].font.bold = True
 
+        # Clean details text and format bold parts
+        details = row['Details'].replace("._x000D_\n_x000D_", " ")
+        details = re.sub(r"\*\*(.*?)\*\*", lambda match: match.group(1).upper(), details)
+
         # Add details in a text box
         text_box = content_slide.shapes.add_textbox(Inches(1), Inches(1.5), Inches(8.5), Inches(5))
         text_frame = text_box.text_frame
         text_frame.word_wrap = True
         p = text_frame.add_paragraph()
-        p.text = row['Details']
+        p.text = details
         p.font.size = Pt(9)
     
     return prs
