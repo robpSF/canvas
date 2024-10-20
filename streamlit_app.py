@@ -22,7 +22,9 @@ def create_ppt_slide(data):
     left = Inches(0.5)
     top = Inches(1.0)
     width = Inches(4.5)
-    height = Inches(5.0)
+    height = Inches(0.8)
+
+    spacing = Inches(0.5)  # Space between each box
 
     for index, row in data.iterrows():
         # Add field name as bold heading
@@ -44,8 +46,8 @@ def create_ppt_slide(data):
         p.text = details
         p.font.size = Pt(9)
 
-        # Adjust top for next entry
-        top += Inches(1.0)
+        # Adjust top for next entry, adding spacing
+        top += height + spacing
     
     return prs
 
